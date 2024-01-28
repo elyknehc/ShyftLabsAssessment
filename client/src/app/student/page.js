@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 
@@ -8,6 +8,20 @@ const Page = () => {
 	const [familyName, setFamilyName] = useState("");
 	const [dateOfBirth, setDateOfBirth] = useState("");
 	const [notification, setNotification] = useState("");
+	const [students, setStudents] = useState([]);
+
+	useEffect(() => {
+		const fetchStudents = async () => {
+			try {
+				const response = await axios.get("http://localhost:3000/students");
+				setStudents(response.data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		fetchStudents();
+	}, [notification]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -23,8 +37,6 @@ const Page = () => {
 				currentDate.getFullYear() - studentDateOfBirth.getFullYear() >= 10
 			) {
 				try {
-					// Add the new student to the system
-					console.log(firstName, familyName, dateOfBirth);
 					await axios.post("http://localhost:3000/students", {
 						firstName,
 						familyName,
@@ -57,7 +69,7 @@ const Page = () => {
 						type="text"
 						value={firstName}
 						onChange={(e) => setFirstName(e.target.value)}
-						className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full text-black" // Add text-black class to change the text color
+						className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full text-black"
 					/>
 				</label>
 				<br />
@@ -67,7 +79,7 @@ const Page = () => {
 						type="text"
 						value={familyName}
 						onChange={(e) => setFamilyName(e.target.value)}
-						className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full text-black" // Add text-black class to change the text color
+						className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full text-black"
 					/>
 				</label>
 				<br />
@@ -77,7 +89,7 @@ const Page = () => {
 						type="date"
 						value={dateOfBirth}
 						onChange={(e) => setDateOfBirth(e.target.value)}
-						className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full text-black" // Add text-black class to change the text color
+						className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full text-black"
 					/>
 				</label>
 				<br />
@@ -89,6 +101,27 @@ const Page = () => {
 				</button>
 			</form>
 			<p className="text-center">{notification}</p>
+
+			<div>
+				<table className="table-auto mt-5 mx-auto">
+					<thead>
+						<tr>
+							<th className="px-4 py-2">First Name</th>
+							<th className="px-4 py-2">Family Name</th>
+							<th className="px-4 py-2">Date of Birth</th>
+						</tr>
+					</thead>
+					<tbody>
+						{students.map((student) => (
+							<tr key={student.id}>
+								<td className="border px-4 py-2">{student.firstName}</td>
+								<td className="border px-4 py-2">{student.familyName}</td>
+								<td className="border px-4 py-2">{student.dateOfBirth}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	);
 };
