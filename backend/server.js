@@ -2,12 +2,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const studentRoutes = require("./routes/studentRoutes");
-const cors = require("cors"); // Import the cors middleware
+const cors = require("cors");
 const app = express();
 const uri =
 	"mongodb+srv://Kyle:IJtnrAArZWYT8QLP@cluster0.ilrudfr.mongodb.net/?retryWrites=true&w=majority";
 
-// Connect to MongoDB using Mongoose
 mongoose
 	.connect(uri, {
 		useNewUrlParser: true,
@@ -18,10 +17,8 @@ mongoose
 
 app.use(bodyParser.json());
 
-// Use the cors middleware
 app.use(cors());
 
-// Routes
 app.use("/students", studentRoutes);
 
 const PORT = process.env.PORT || 3000;

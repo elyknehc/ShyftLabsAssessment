@@ -34,4 +34,17 @@ exports.addStudent = async (req, res) => {
 	}
 };
 
-// Add more functions for update, delete, etc. as needed
+exports.deleteStudent = async (req, res) => {
+	try {
+		const student = await Student.findById(req.params.id);
+
+		if (!student) {
+			return res.status(404).send("Student not found.");
+		}
+
+		await student.remove();
+		res.status(200).send("Student deleted successfully.");
+	} catch (err) {
+		res.status(500).send(err);
+	}
+};
