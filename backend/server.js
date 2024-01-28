@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const studentRoutes = require("./routes/studentRoutes");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const cors = require("cors"); // Import the cors middleware
 const app = express();
 const uri =
 	"mongodb+srv://Kyle:IJtnrAArZWYT8QLP@cluster0.ilrudfr.mongodb.net/?retryWrites=true&w=majority";
@@ -17,6 +17,9 @@ mongoose
 	.catch((err) => console.error("Could not connect to MongoDB...", err));
 
 app.use(bodyParser.json());
+
+// Use the cors middleware
+app.use(cors());
 
 // Routes
 app.use("/students", studentRoutes);
